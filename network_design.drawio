@@ -34,12 +34,15 @@
     </mxGraphModel>
   </diagram>
   <diagram id="gOztiwmJ4GUzOERbwi0Q" name="！構造！">
-    <mxGraphModel dx="3565" dy="2028" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1080" pageHeight="1920" math="0" shadow="0">
+    <mxGraphModel dx="2037" dy="1159" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1080" pageHeight="1920" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="XG7FCtJzq9D46e_EELIM-1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontFamily=Cascadia Code;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCascadia%2BCode;fontSize=64;" value="Structure 構造設計書" vertex="1">
           <mxGeometry height="120" width="1080" as="geometry" />
+        </mxCell>
+        <mxCell id="xu_EIp3IU5YYoAvlGm1A-1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontFamily=Cascadia Code;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCascadia%2BCode;fontSize=32;" value="&lt;font&gt;ほぼコードみたいな感じにする&lt;/font&gt;" vertex="1">
+          <mxGeometry height="120" width="1080" y="100" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
