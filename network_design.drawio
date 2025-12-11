@@ -44,6 +44,9 @@
         <mxCell id="xu_EIp3IU5YYoAvlGm1A-1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontFamily=Cascadia Code;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCascadia%2BCode;fontSize=32;" value="&lt;font&gt;ほぼコードみたいな感じにする&lt;/font&gt;" vertex="1">
           <mxGeometry height="120" width="1080" y="100" as="geometry" />
         </mxCell>
+        <mxCell id="xu_EIp3IU5YYoAvlGm1A-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Cascadia Code;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCascadia%2BCode;verticalAlign=top;align=left;fontSize=18;" value="" vertex="1">
+          <mxGeometry height="160" width="400" x="150" y="300" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
