@@ -28,6 +28,9 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="XG7FCtJzq9D46e_EELIM-1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontFamily=Cascadia Code;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCascadia%2BCode;fontSize=64;" value="Structure 構造設計書" vertex="1">
+          <mxGeometry height="120" width="1080" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
