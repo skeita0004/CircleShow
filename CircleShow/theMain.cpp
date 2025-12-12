@@ -1,22 +1,13 @@
 #include <WinSock2.h>
 #include <WS2tcpip.h>
 #include <DxLib.h>
+#include "Circle.h"
 
 #pragma comment(lib, "ws2_32.lib")
 
 //ウィンドウサイズ
 const int WIN_WIDTH = 800;
 const int WIN_HEIGHT = 600;
-
-struct Circle
-{
-	void Load(char* p);//ネットワークから受信したデータを変換して受け取る
-	void Store(char* p);//ネットワークに送信するデータを変換して送る
-	int color;
-	int x;
-	int y;
-	int r;
-};
 
 int APIENTRY WinMain(_In_     HINSTANCE hInstance,
 					 _In_opt_ HINSTANCE hPrevInstance,
@@ -30,7 +21,7 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
     SetGraphMode(WIN_WIDTH, WIN_HEIGHT, 32);
     SetBackgroundColor(0, 0, 0);
     SetAlwaysRunFlag(1);
-
+    
     if (DxLib_Init() == -1)
     {
         return -1;

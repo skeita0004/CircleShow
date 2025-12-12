@@ -139,6 +139,9 @@
   <ItemGroup>
     <ClCompile Include="theMain.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Circle.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
