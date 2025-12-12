@@ -127,7 +127,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ClientData.cpp" />
     <ClCompile Include="TheMain.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ClientData.h" />
+    <ClInclude Include="Server.h" />
+    <ClInclude Include="StubCircle.h" />
+    <ClInclude Include="WSAIncluding.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
