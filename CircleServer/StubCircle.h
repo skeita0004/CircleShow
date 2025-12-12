@@ -1,3 +1,6 @@
 #pragma once
 
-struct Circle {};
+struct Circle 
+{
+	int i;
+};
