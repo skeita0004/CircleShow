@@ -11,16 +11,6 @@
 const int WIN_WIDTH = 800;
 const int WIN_HEIGHT = 600;
 
-struct Circle
-{
-	void Load(char* p);//ネットワークから受信したデータを変換して受け取る
-	void Store(char* p);//ネットワークに送信するデータを変換して送る
-	int color;
-	int x;
-	int y;
-	int r;
-};
-
 namespace
 {
     const uint16_t SV_PORT{8888};
@@ -67,15 +57,15 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
     SetWindowSizeChangeEnableFlag(false, false);
     SetMainWindowText("Client");
     SetGraphMode(WIN_WIDTH, WIN_HEIGHT, 32);
-    SetBackgroundColor(0, 0, 0);
-    SetAlwaysRunFlag(1);
     
     if (DxLib_Init() == -1)
     {
         return -1;
     }
 
+    SetBackgroundColor(0, 0, 0);
     SetDrawScreen(DX_SCREEN_BACK);
+    SetAlwaysRunFlag(1);
 
     while (true)
     {
