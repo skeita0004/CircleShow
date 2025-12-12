@@ -3,11 +3,7 @@
 
 Server::Server()
 {
-	clientsData_.resize(3);
-	for (int i = 0;i < clientsData_.size();i++)
-	{
-		clientsData_[i].circle_.i = 5 * i;
-	}
+	
 }
 
 Server::~Server()
@@ -29,6 +25,6 @@ void Server::Send(char* _pBuffer, const int _bufferSize)
 		char* p = &buff[sizeof(Circle) * i + sizeof(UINT8)];
 		memcpy(p, &clientsData_[i].circle_, sizeof(Circle));
 	}
-
+    
 	memcpy(_pBuffer, &buff, _bufferSize);
 }

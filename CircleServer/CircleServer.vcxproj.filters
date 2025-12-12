@@ -32,10 +32,10 @@
     <ClInclude Include="WSAIncluding.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="StubCircle.h">
+    <ClInclude Include="Server.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Server.h">
+    <ClInclude Include="BufferSize.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
