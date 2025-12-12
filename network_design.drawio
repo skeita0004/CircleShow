@@ -23,7 +23,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="tsYMKeYneBfjix8UqJFg" name="通信フロー">
-    <mxGraphModel dx="2852" dy="1622" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1080" pageHeight="1920" math="0" shadow="0">
+    <mxGraphModel dx="3203" dy="1405" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1080" pageHeight="1920" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -34,7 +34,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="gOztiwmJ4GUzOERbwi0Q" name="！構造！">
-    <mxGraphModel dx="610" dy="268" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1080" pageHeight="1920" math="0" shadow="0">
+    <mxGraphModel dx="1068" dy="468" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1080" pageHeight="1920" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -84,6 +84,42 @@
         </mxCell>
         <mxCell id="IcABTAxErFedGVvndU0c-1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="クライアントが受け取るデータの1バイト目は、クライアントの人数" vertex="1">
           <mxGeometry height="30" width="380" x="330" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="BQpdd6u6WeieVrl3vOAT-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="3" vertex="1">
+          <mxGeometry height="60" width="70" x="330" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="BQpdd6u6WeieVrl3vOAT-3" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="クライアント数" vertex="1">
+          <mxGeometry height="30" width="80" x="320" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="BQpdd6u6WeieVrl3vOAT-6" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Circle構造体1" vertex="1">
+          <mxGeometry height="30" width="80" x="480" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="BQpdd6u6WeieVrl3vOAT-7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="" vertex="1">
+          <mxGeometry height="60" width="70" x="400" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="BQpdd6u6WeieVrl3vOAT-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="" vertex="1">
+          <mxGeometry height="60" width="70" x="470" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="BQpdd6u6WeieVrl3vOAT-9" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="" vertex="1">
+          <mxGeometry height="60" width="70" x="540" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="BQpdd6u6WeieVrl3vOAT-10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="" vertex="1">
+          <mxGeometry height="60" width="70" x="610" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="BQpdd6u6WeieVrl3vOAT-11" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="" vertex="1">
+          <mxGeometry height="60" width="280" x="400" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="BQpdd6u6WeieVrl3vOAT-12" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="" vertex="1">
+          <mxGeometry height="60" width="280" x="680" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="BQpdd6u6WeieVrl3vOAT-13" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="" vertex="1">
+          <mxGeometry height="60" width="280" x="960" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="BQpdd6u6WeieVrl3vOAT-14" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Circle構造体2" vertex="1">
+          <mxGeometry height="30" width="80" x="780" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="BQpdd6u6WeieVrl3vOAT-16" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Circle構造体3" vertex="1">
+          <mxGeometry height="30" width="80" x="1040" y="350" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
