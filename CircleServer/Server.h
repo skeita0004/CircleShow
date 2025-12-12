@@ -16,6 +16,18 @@ public:
     void JoinClient(const SOCKET _sock, const SOCKADDR_IN& _sockAddrIn);
 
     /// <summary>
+    /// クライアントが切断時の処理
+    /// </summary>
+    /// <param name="_sock">クライアントとのソケット</param>
+    /// <param name="_sockAddrIn">クライアントの接続情報</param>
+    void LeaveClient(const SOCKET _sock, const SOCKADDR_IN& _sockAddrIn);
+
+    /// <summary>
+    /// サーバの更新処理
+    /// </summary>
+    bool Update();
+
+    /// <summary>
     /// クライアントのインデクスを取得する
     /// </summary>
     /// <returns>クライアントの接続情報</returns>
