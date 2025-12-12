@@ -23,7 +23,8 @@ void Server::Send(char* _pBuffer, const int _bufferSize)
 	for (size_t i = 0; i < CLIENT_COUNT; i++)
 	{
 		char* p = &buff[sizeof(Circle) * i + sizeof(UINT8)];
-		memcpy(p, &clientsData_[i].circle_, sizeof(Circle));
+        clientsData_[i].circle_.Store(p);
+		//memcpy(p, &clientsData_[i].circle_, sizeof(Circle));
 	}
     
 	memcpy(_pBuffer, &buff, _bufferSize);
