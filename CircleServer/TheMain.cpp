@@ -29,6 +29,8 @@ int main()
     }
     cout << "Success :socket" << endl;
 
+    Server server = {};
+
     while (true)
     {
         
