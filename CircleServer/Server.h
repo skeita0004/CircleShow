@@ -8,8 +8,9 @@ public:
     Server();
     ~Server();
 
-	void Receive(const char* _pBuffer, const int _bufferSize);
 	void Send(char* _pBuffer, const int _bufferSize);
+    void Receive(const char* _pBuffer, const int _bufferSize, const size_t _clientIndex);
+
 private:
     std::vector<ClientData> clientsData_;  // クライアントのデータ
 };
