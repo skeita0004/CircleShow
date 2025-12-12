@@ -1,7 +1,8 @@
 #include "Server.h"
 #include <cassert>
 
-Server::Server()
+Server::Server(const SOCKADDR_IN& _localSockAddr) :
+    localSockAddrIn_{ _localSockAddr }
 {
 	
 }
@@ -23,6 +24,42 @@ void Server::Receive(const char* _pBuffer, const int _bufferSize, const size_t _
 	clientData.circle_.Load(_pBuffer);
 	// MEMO: 安全性向上のためにサイズも送るようにしたい
 	// clientData.circle_.Load(_pBuffer, _bufferSize);
+}
+
+void Server::Initialize()
+{
+    int ret = 0;
+
+    // 受信用ソケットの作成
+    listenerSock_ = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+
+    if (listenerSock_ == INVALID_SOCKET)
+    {
+        throw std::exception{ "無効なソケット" };
+    }
+
+    ret = bind(listenerSock_, reinterpret_cast<SOCKADDR*>(&localSockAddrIn_), sizeof(localSockAddrIn_));
+    if (ret == SOCKET_ERROR)
+    {
+        throw std::exception{ "IPアドレスのバインドに失敗" };
+    }
+
+    ret = listen(listenerSock_, UINT8_MAX);
+    if (ret == SOCKET_ERROR)
+    {
+        throw std::exception{ "リスンソケットの受付開始に失敗" };
+    }
+}
+
+void Server::Update()
+{
+    int ret = 0;
+
+    SOCKADDR_IN remoteSockAddrIn = {};
+    int length = sizeof(remoteSockAddrIn);
+    ret = accept(listenerSock_, reinterpret_cast<SOCKADDR*>(&remoteSockAddrIn), &length);
+
+
 }
 
 void Server::Send(char* _pBuffer, const int _bufferSize)
