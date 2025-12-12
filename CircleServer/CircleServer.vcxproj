@@ -139,7 +139,6 @@
     <ClInclude Include="BufferSize.h" />
     <ClInclude Include="ClientData.h" />
     <ClInclude Include="Server.h" />
-    <ClInclude Include="StubCircle.h" />
     <ClInclude Include="WSAIncluding.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

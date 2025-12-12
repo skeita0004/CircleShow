@@ -9,5 +9,11 @@ int main()
 	std::cout << BUFFER_SIZE << std::endl;
 
 	std::cout << "サーバー予定" "やってこー" << std::endl;
+
+	while (true)
+	{
+
+	}
+
 	return 0;
 }

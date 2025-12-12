@@ -1,6 +1,6 @@
 #pragma once
 #include "WSAIncluding.h"
-#include "../Common/Circle.h"
+#include "Circle.h"
 
 
 /// <summary>
