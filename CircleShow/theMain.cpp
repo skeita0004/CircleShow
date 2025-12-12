@@ -73,7 +73,7 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
 
         //動作確認用の円
         DrawCircle(WIN_WIDTH / 2, WIN_HEIGHT / 2, 10, GetColor(255, 0, 0));
-
+        
         ScreenFlip();
         WaitTimer(16);
         if (ProcessMessage() == -1)
