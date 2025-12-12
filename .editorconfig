@@ -1,0 +1,6 @@
+root = true
+
+# All files
+[*]
+indent_style = space
+char_set     = utf-8-bom
