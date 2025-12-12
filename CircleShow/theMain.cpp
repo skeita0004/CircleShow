@@ -3,6 +3,7 @@
 #include <format>
 #include <string>
 #include <DxLib.h>
+#include "Circle.h"
 
 #pragma comment(lib, "ws2_32.lib")
 
@@ -68,7 +69,7 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
     SetGraphMode(WIN_WIDTH, WIN_HEIGHT, 32);
     SetBackgroundColor(0, 0, 0);
     SetAlwaysRunFlag(1);
-
+    
     if (DxLib_Init() == -1)
     {
         return -1;
