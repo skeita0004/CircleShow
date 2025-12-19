@@ -144,6 +144,16 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
             DrawCircle(circle.x, circle.y, circle.r, circle.color);
         }
 
+        Circle circle;
+        circle.x = 0;
+        circle.y = 0;
+        circle.r = 30;
+        circle.color = GetColor(255, 0, 0);
+        GetMousePoint(&circle.x, &circle.y);
+        
+        //円表示
+        DrawCircle(circle.x, circle.y, circle.r, circle.color);
+        
         ScreenFlip();
         WaitTimer(16);
         if (ProcessMessage() == -1)
