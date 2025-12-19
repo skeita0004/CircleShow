@@ -18,7 +18,8 @@ namespace
 
     const uint16_t SV_PORT{ 8888 };
     //const char*    SERVER_IPADDRESS{"192.168.42.144"};
-    const char*    SERVER_IPADDRESS{ "127.0.0.1" };
+    //const char*    SERVER_IPADDRESS{ "127.0.0.1" };
+    const char*    SERVER_IPADDRESS{ "192.168.42.90" };
 }
 
 int APIENTRY WinMain(_In_     HINSTANCE hInstance,
@@ -163,7 +164,7 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
 
             // 変換してメンバたちに代入
             // (Circleの方で実装)
-            circles[i].Load(recvRawData);
+            circles[i].Load(recvRawData + sizeof(Circle) * i);
         }
 
         // 表示
