@@ -2,8 +2,9 @@
 #include <WS2tcpip.h>
 #include <format>
 #include <string>
+#include <vector>
 #include <DxLib.h>
-
+#include "Circle.h"
 
 #pragma comment(lib, "ws2_32.lib")
 
@@ -67,12 +68,46 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
     SetDrawScreen(DX_SCREEN_BACK);
     SetAlwaysRunFlag(1);
 
+    // 円をつくる
+    Circle myCircle{
+        .color{GetColor(255, 0, 255)},
+        .r{10}
+    };
+
     while (true)
     {
         ClearDrawScreen();
 
-        //動作確認用の円
-        DrawCircle(WIN_WIDTH / 2, WIN_HEIGHT / 2, 10, GetColor(255, 0, 0));
+        // マウスの入力取る
+
+        // 構造体を送信する
+        int retVal = send(sock, (char*)&myCircle, sizeof(myCircle), 0);
+        if (retVal == SOCKET_ERROR and WSAGetLastError() != WSAEWOULDBLOCK)
+        {
+            std::string errorMsg{ std::format("Error send (Sending my circle data). Error Code : {}", WSAGetLastError()) };
+            MessageBox(nullptr, errorMsg.c_str(), "ERROR!", MB_OK bitor MB_ICONERROR);
+            return -1;
+        }
+
+        // 受信用配列
+        std::vector<Circle> circles{};
+
+        void* recvRawData{};
+
+        // 人数を取得
+        //recv(sock, (char*)recvRawData, , 0)
+        //size_t userNum = 
+
+        // 人数分のfor
+
+        // 変換して変数たちに代入
+        // (Circleの方で実装)
+
+        // 表示
+        for (auto& circle : circles)
+        {
+            DrawCircle(circle.x, circle.y, circle.r, circle.color);
+        }
 
         ScreenFlip();
         WaitTimer(16);
