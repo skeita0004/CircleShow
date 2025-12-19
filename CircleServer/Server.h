@@ -5,7 +5,7 @@
 class Server
 {
 public:
-    Server();
+    Server(const SOCKADDR_IN& _localSockAddr);
     ~Server();
 
     /// <summary>
@@ -23,9 +23,14 @@ public:
     void LeaveClient(const SOCKET _sock, const SOCKADDR_IN& _sockAddrIn);
 
     /// <summary>
+    /// 初期化処理
+    /// </summary>
+    void Initialize();
+
+    /// <summary>
     /// サーバの更新処理
     /// </summary>
-    bool Update();
+    void Update();
 
     /// <summary>
     /// クライアントのインデクスを取得する
@@ -48,5 +53,7 @@ public:
     void Receive(const char* _pBuffer, const int _bufferSize, const size_t _clientIndex);
 
 private:
+    SOCKADDR_IN localSockAddrIn_;  // サーバ自身のインターネットのソケットアドレス
+    SOCKET listenerSock_;  // 受付用ソケット
     std::vector<ClientData> clientsData_;  // クライアントのデータ
 };
