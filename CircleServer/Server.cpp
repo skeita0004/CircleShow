@@ -1,19 +1,20 @@
 #include "Server.h"
 #include <cassert>
-
+#include "BufferSize.h"
 namespace
 {
-    static const size_t SERVER_SEND_BUFFER_SIZE{ sizeof(Circle) * 256 + sizeof(UINT8) };
 }
 
 Server::Server(const SOCKADDR_IN& _localSockAddr) :
-    localSockAddrIn_{ _localSockAddr }
+    localSockAddrIn_{ _localSockAddr },
+    listenerSock_{ INVALID_SOCKET }
 {
 	
 }
 
 Server::~Server()
 {
+    closesocket(listenerSock_);
 }
 
 void Server::JoinClient(const SOCKET _sock, const SOCKADDR_IN& _sockAddrIn)
@@ -47,9 +48,12 @@ void Server::LeaveClient(const SOCKET _sock, const SOCKADDR_IN& _sockAddrIn)
 {
     for (ClientData& clientData : clientsData_)
     {
+        // ソケットが一致するクライアントのデータを探す
         if (clientData.sock_ == _sock)
         {
+            // 未使用状態にする
             clientData.useFlag_ = false;
+            // ソケット、サークルのデータをリセット
             clientData.sock_ = INVALID_SOCKET;
             clientData.circle_ = Circle();
         }
@@ -109,10 +113,12 @@ void Server::Update()
 
 void Server::Send(char* _pBuffer, const int _bufferSize)
 {
-    assert(_bufferSize <= SERVER_SEND_BUFFER_SIZE && "バッファのサイズが足りない");
+    assert(_bufferSize <= BUFFER_SIZE && "バッファのサイズが足りない");
 
-	size_t CLIENT_COUNT = clientsData_.size();
-	char buff[SERVER_SEND_BUFFER_SIZE]{};
+    // クライアントの数を取得
+	const size_t CLIENT_COUNT = clientsData_.size();
+    // 
+	char buff[BUFFER_SIZE]{};
 
 	buff[0] = CLIENT_COUNT;
 	for (size_t i = 0; i < CLIENT_COUNT; i++)
