@@ -1,6 +1,11 @@
 #include "Server.h"
 #include <cassert>
 
+namespace
+{
+    static const size_t SERVER_SEND_BUFFER_SIZE{ sizeof(Circle) * 256 + sizeof(UINT8) };
+}
+
 Server::Server(const SOCKADDR_IN& _localSockAddr) :
     localSockAddrIn_{ _localSockAddr }
 {
@@ -64,8 +69,10 @@ void Server::Update()
 
 void Server::Send(char* _pBuffer, const int _bufferSize)
 {
+    assert(_bufferSize <= SERVER_SEND_BUFFER_SIZE && "バッファのサイズが足りない");
+
 	size_t CLIENT_COUNT = clientsData_.size();
-	char buff[sizeof(Circle) * 256 + sizeof(UINT8)];
+	char buff[SERVER_SEND_BUFFER_SIZE]{};
 
 	buff[0] = CLIENT_COUNT;
 	for (size_t i = 0; i < CLIENT_COUNT; i++)
