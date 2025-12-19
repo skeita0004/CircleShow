@@ -9,6 +9,17 @@ public:
     ~Server();
 
     /// <summary>
+    /// 初期化処理
+    /// </summary>
+    void Initialize();
+
+    /// <summary>
+    /// サーバの更新処理
+    /// </summary>
+    void Update();
+
+private:
+    /// <summary>
     /// クライアントが接続時の処理
     /// </summary>
     /// <param name="_sock">クライアントとのソケット</param>
@@ -33,16 +44,6 @@ public:
     void ReceiveAll();
 
     /// <summary>
-    /// 初期化処理
-    /// </summary>
-    void Initialize();
-
-    /// <summary>
-    /// サーバの更新処理
-    /// </summary>
-    void Update();
-
-    /// <summary>
     /// クライアントのインデクスを取得する
     /// </summary>
     /// <returns>クライアントの接続情報</returns>
@@ -52,6 +53,7 @@ public:
     /// 全クライアントに送信処理
     /// </summary>
     void SendAll();
+
     /// <summary>
     /// 受信処理
     /// </summary>
