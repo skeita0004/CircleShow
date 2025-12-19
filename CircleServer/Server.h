@@ -23,6 +23,11 @@ public:
     void LeaveClient(const SOCKET _sock, const SOCKADDR_IN& _sockAddrIn);
 
     /// <summary>
+    /// 全クライアントからの受信処理をする
+    /// </summary>
+    void ReceiveAll();
+
+    /// <summary>
     /// 初期化処理
     /// </summary>
     void Initialize();
@@ -39,11 +44,9 @@ public:
     const size_t GetIndex(const SOCKADDR_IN& _sockAddrIn);
 
     /// <summary>
-    /// 送信処理
+    /// 全クライアントに送信処理
     /// </summary>
-    /// <param name="_pBuffer">バッファのポインタ</param>
-    /// <param name="_bufferSize">バッファサイズ</param>
-    void Send(char* _pBuffer, const int _bufferSize);
+    void SendAll();
     /// <summary>
     /// 受信処理
     /// </summary>

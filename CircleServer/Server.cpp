@@ -1,9 +1,6 @@
 #include "Server.h"
 #include <cassert>
 #include "BufferSize.h"
-namespace
-{
-}
 
 Server::Server(const SOCKADDR_IN& _localSockAddr) :
     localSockAddrIn_{ _localSockAddr },
@@ -60,6 +57,23 @@ void Server::LeaveClient(const SOCKET _sock, const SOCKADDR_IN& _sockAddrIn)
     }
 }
 
+void Server::ReceiveAll()
+{
+    for (auto itr = clientsData_.begin();
+        itr != clientsData_.end();
+        itr++)
+    {
+        const size_t CLIENT_INDEX{ itr - clientsData_.begin() };
+
+        int ret{};
+
+        char buff[RECEIVE_BUFFER_SIZE]{};
+        ret = recv(itr->sock_, buff, RECEIVE_BUFFER_SIZE, 0);
+
+        Receive(buff, RECEIVE_BUFFER_SIZE, CLIENT_INDEX);
+    }
+}
+
 void Server::Receive(const char* _pBuffer, const int _bufferSize, const size_t _clientIndex)
 {
 	assert(0 <= _clientIndex && _clientIndex <= clientsData_.size()
@@ -104,21 +118,32 @@ void Server::Update()
 {
     int ret = 0;
 
-    SOCKADDR_IN remoteSockAddrIn = {};
-    int length = sizeof(remoteSockAddrIn);
-    ret = accept(listenerSock_, reinterpret_cast<SOCKADDR*>(&remoteSockAddrIn), &length);
+    while (true)
+    {
+        SOCKADDR_IN remoteSockAddrIn = {};
+        int length = sizeof(remoteSockAddrIn);
+        SOCKET sock{ accept(listenerSock_, reinterpret_cast<SOCKADDR*>(&remoteSockAddrIn), &length) };
 
+        if (sock == INVALID_SOCKET)
+        {  // 了承したソケットが無効なら接続者なし
+            break;
+        }
 
+        // 参加処理する
+        JoinClient(sock, remoteSockAddrIn);
+
+        // まだいるかもしれないからループループする
+    }
+
+    ReceiveAll();
+
+    SendAll();
 }
 
-void Server::Send(char* _pBuffer, const int _bufferSize)
+void Server::SendAll()
 {
-    assert(_bufferSize <= BUFFER_SIZE && "バッファのサイズが足りない");
-
-    // クライアントの数を取得
-	const size_t CLIENT_COUNT = clientsData_.size();
-    // 
-	char buff[BUFFER_SIZE]{};
+	size_t CLIENT_COUNT = clientsData_.size();
+	char buff[SEND_BUFFER_SIZE]{};
 
 	buff[0] = CLIENT_COUNT;
 	for (size_t i = 0; i < CLIENT_COUNT; i++)
@@ -127,6 +152,21 @@ void Server::Send(char* _pBuffer, const int _bufferSize)
         clientsData_[i].circle_.Store(p);
 		//memcpy(p, &clientsData_[i].circle_, sizeof(Circle));
 	}
+    int writeLength{ sizeof(Circle) * CLIENT_COUNT + sizeof(UINT8) };
     
-	memcpy(_pBuffer, &buff, _bufferSize);
+    // 全クライアントに送信する
+    for (ClientData& client : clientsData_)
+    {
+        if (client.sock_ == INVALID_SOCKET)
+        {  // 無効ソケットなら使ってない判定
+            client.useFlag_ = false;
+        }
+        if (client.useFlag_ == false)
+        {  // 使っていないなら早期回帰
+            continue;
+        }
+
+        // 送信！
+        send(client.sock_, buff, writeLength, 0);
+    }
 }

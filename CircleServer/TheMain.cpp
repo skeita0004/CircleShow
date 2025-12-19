@@ -7,7 +7,7 @@ using std::endl;
 
 int main()
 {
-    std::cout << BUFFER_SIZE << std::endl;
+    std::cout << SEND_BUFFER_SIZE << std::endl;
 
     std::cout << "サーバー予定" "やってこー" << std::endl;
 
@@ -33,7 +33,7 @@ int main()
 
     while (true)
     {
-        
+        server.Update();
     }
 
     return 0;
