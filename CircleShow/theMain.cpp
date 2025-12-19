@@ -119,17 +119,29 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
         std::vector<Circle> circles{};
 
         // 受信用ポインタ変数
-        char* recvRawData{};
+        char recvRawData[sizeof(Circle)]{};
 
         // まず人数を取得
-        recv(sock, recvRawData, sizeof(char), 0);
-
+        size_t recvDataSize{};
         size_t userNum{0};
+        retVal = recv(sock, recvRawData, sizeof(char), 0);
+        if (retVal == SOCKET_ERROR and WSAGetLastError() != WSAEWOULDBLOCK)
+        {
+            std::string errorMsg{ std::format("Error recv (Receiving my circle data). Error Code : {}", WSAGetLastError()) };
+            MessageBox(nullptr, errorMsg.c_str(), "ERROR!", MB_OK bitor MB_ICONERROR);
+            return -1;
+        }
         memcpy_s(&userNum, sizeof(userNum), recvRawData, sizeof(char));
-        const size_t recvDataSize{sizeof(Circle) * userNum};
+        recvDataSize = sizeof(Circle) * userNum;
 
         // 本命のデータをユーザ分取得
-        recv(sock, recvRawData, recvDataSize, 0);
+        retVal = recv(sock, recvRawData, recvDataSize, 0);
+        if (retVal == SOCKET_ERROR and WSAGetLastError() != WSAEWOULDBLOCK)
+        {
+            std::string errorMsg{ std::format("Error recv (Receiving my circle data). Error Code : {}", WSAGetLastError()) };
+            MessageBox(nullptr, errorMsg.c_str(), "ERROR!", MB_OK bitor MB_ICONERROR);
+            return -1;
+        }
 
         // 人数分のfor
         for (int i = 0; i < userNum; i++)
