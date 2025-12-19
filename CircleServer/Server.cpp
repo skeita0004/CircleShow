@@ -87,7 +87,7 @@ void Server::ReceiveAll()
         itr != clientsData_.end();
         itr++)
     {
-        const size_t CLIENT_INDEX{ itr - clientsData_.begin() };
+        const size_t CLIENT_INDEX{ static_cast<size_t>(itr - clientsData_.begin()) };
 
         int ret{};
 
@@ -157,9 +157,9 @@ void Server::SendAll()
     {
         char* p = &buff[sizeof(Circle) * i + sizeof(UINT8)];
         clientsData_[i].circle_.Store(p);
-        //memcpy(p, &clientsData_[i].circle_, sizeof(Circle));
-    }
-    int writeLength{ sizeof(Circle) * CLIENT_COUNT + sizeof(UINT8) };
+		//memcpy(p, &clientsData_[i].circle_, sizeof(Circle));
+	}
+    int writeLength{ static_cast<int>(sizeof(Circle) * CLIENT_COUNT + sizeof(UINT8)) };
     
     // 全クライアントに送信する
     for (ClientData& client : clientsData_)

@@ -1,4 +1,6 @@
 #include <iostream>
+#include <chrono>
+#include <thread>
 #include "WSAIncluding.h"
 #include "Server.h"
 #include "BufferSize.h"
@@ -29,11 +31,17 @@ int main()
     }
     cout << "Success :socket" << endl;
 
-    Server server = {};
+    SOCKADDR_IN sockAddr{};
+    int result{};
+    result = inet_pton(AF_INET, "127.0.0.1", &sockAddr.sin_addr.s_addr);
+
+    Server server = { sockAddr };
 
     while (true)
     {
         server.Update();
+        //std::chrono::
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 60));
     }
 
     return 0;
