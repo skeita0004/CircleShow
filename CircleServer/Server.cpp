@@ -10,6 +10,46 @@ Server::~Server()
 {
 }
 
+void Server::JoinClient(const SOCKET _sock, const SOCKADDR_IN& _sockAddrIn)
+{
+    // 既にクライアントが登録されていないかチェック
+    for (ClientData& clientData : clientsData_)
+    {
+        if (clientData.useFlag_ && clientData.sock_ == _sock)
+            return;
+    }
+
+    for (ClientData& clientData : clientsData_)
+    {
+        // 使用中のデータはスキップ
+        if (clientData.useFlag_)
+            continue;
+
+        // 空いているデータ使用する
+        clientData.useFlag_ = true;
+        clientData.sock_ = _sock;
+        clientData.circle_ = Circle();
+        
+        return;
+    }
+
+    // 全て使用中だったから新たに追加
+    clientsData_.push_back(ClientData{ true,Circle(),_sock });
+}
+
+void Server::LeaveClient(const SOCKET _sock, const SOCKADDR_IN& _sockAddrIn)
+{
+    for (ClientData& clientData : clientsData_)
+    {
+        if (clientData.sock_ == _sock)
+        {
+            clientData.useFlag_ = false;
+            clientData.sock_ = INVALID_SOCKET;
+            clientData.circle_ = Circle();
+        }
+    }
+}
+
 void Server::Receive(const char* _pBuffer, const int _bufferSize, const size_t _clientIndex)
 {
 	assert(0 <= _clientIndex && _clientIndex <= clientsData_.size()
