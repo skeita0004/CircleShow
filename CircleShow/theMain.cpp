@@ -80,6 +80,8 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
     // 円をつくる
     Circle myCircle{
         .color{GetColor(GetRand(256), GetRand(256), GetRand(256))},
+        .x{0},
+        .y{0},
         .r{10}
     };
 
@@ -88,7 +90,7 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
         ClearDrawScreen();
 
         // マウスの入力取る
-
+        GetMousePoint(&myCircle.x, &myCircle.y);
 
         // ---------------構造体を送信する----------------
         // 変換
@@ -144,16 +146,15 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
             DrawCircle(circle.x, circle.y, circle.r, circle.color);
         }
 
-        Circle circle;
-        circle.x = 0;
-        circle.y = 0;
-        circle.r = 30;
-        circle.color = GetColor(255, 0, 0);
-        GetMousePoint(&circle.x, &circle.y);
-        
-        //円表示
-        DrawCircle(circle.x, circle.y, circle.r, circle.color);
-        
+        //Circle circle;
+        //circle.x = 0;
+        //circle.y = 0;
+        //circle.r = 30;
+        //circle.color = GetColor(255, 0, 0);
+        //
+        ////円表示
+        //DrawCircle(circle.x, circle.y, circle.r, circle.color);
+        //
         ScreenFlip();
         WaitTimer(16);
         if (ProcessMessage() == -1)
