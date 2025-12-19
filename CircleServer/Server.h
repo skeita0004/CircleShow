@@ -23,6 +23,11 @@ public:
     void LeaveClient(const SOCKET _sock, const SOCKADDR_IN& _sockAddrIn);
 
     /// <summary>
+    /// 全クライアントからの受信処理をする
+    /// </summary>
+    void ReceiveAll();
+
+    /// <summary>
     /// 初期化処理
     /// </summary>
     void Initialize();

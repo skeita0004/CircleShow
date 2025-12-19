@@ -33,7 +33,7 @@ int main()
 
     while (true)
     {
-        
+        server.Update();
     }
 
     return 0;

@@ -4,6 +4,7 @@
 namespace
 {
     static const size_t SERVER_SEND_BUFFER_SIZE{ sizeof(Circle) * 256 + sizeof(UINT8) };
+    static const size_t RECEIVE_BUFFER_SIZE{ sizeof(Circle) };
 }
 
 Server::Server(const SOCKADDR_IN& _localSockAddr) :
@@ -56,6 +57,23 @@ void Server::LeaveClient(const SOCKET _sock, const SOCKADDR_IN& _sockAddrIn)
     }
 }
 
+void Server::ReceiveAll()
+{
+    for (auto itr = clientsData_.begin();
+        itr != clientsData_.end();
+        itr++)
+    {
+        const size_t CLIENT_INDEX{ itr - clientsData_.begin() };
+
+        int ret{};
+
+        char buff[RECEIVE_BUFFER_SIZE]{};
+        ret = recv(itr->sock_, buff, RECEIVE_BUFFER_SIZE, 0);
+
+        Receive(buff, RECEIVE_BUFFER_SIZE, CLIENT_INDEX);
+    }
+}
+
 void Server::Receive(const char* _pBuffer, const int _bufferSize, const size_t _clientIndex)
 {
 	assert(0 <= _clientIndex && _clientIndex <= clientsData_.size()
@@ -100,11 +118,26 @@ void Server::Update()
 {
     int ret = 0;
 
-    SOCKADDR_IN remoteSockAddrIn = {};
-    int length = sizeof(remoteSockAddrIn);
-    ret = accept(listenerSock_, reinterpret_cast<SOCKADDR*>(&remoteSockAddrIn), &length);
+    while (true)
+    {
+        SOCKADDR_IN remoteSockAddrIn = {};
+        int length = sizeof(remoteSockAddrIn);
+        SOCKET sock{ accept(listenerSock_, reinterpret_cast<SOCKADDR*>(&remoteSockAddrIn), &length) };
 
+        if (sock == INVALID_SOCKET)
+        {  // 了承したソケットが無効なら接続者なし
+            break;
+        }
 
+        // 参加処理する
+        JoinClient(sock, remoteSockAddrIn);
+
+        // まだいるかもしれないからループループする
+    }
+
+    ReceiveAll();
+
+    SendAll();
 }
 
 void Server::SendAll()
@@ -122,7 +155,7 @@ void Server::SendAll()
     int writeLength{ sizeof(Circle) * CLIENT_COUNT + sizeof(UINT8) };
     
     // 全クライアントに送信する
-    for (auto& client : clientsData_)
+    for (ClientData& client : clientsData_)
     {
         if (client.sock_ == INVALID_SOCKET)
         {  // 無効ソケットなら使ってない判定
