@@ -5,7 +5,7 @@
 #pragma comment(lib, "ws2_32.lib")
 struct Circle
 {
-    void Load(char* p)//ネットワークから受信したデータを変換して受け取る
+    void Load(const char* p)//ネットワークから受信したデータを変換して受け取る
     {
         Circle circle;//ネットワークのデータを入れる仮の構造体
 
