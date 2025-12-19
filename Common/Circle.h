@@ -5,9 +5,12 @@
 #pragma comment(lib, "ws2_32.lib")
 struct Circle
 {
-    void Load(char* p)//�l�b�g���[�N�����M�����f�[�^��ϊ����Ď󂯎��
+    void Load(char* p)//ネットワークから受信したデータを変換して受け取る
     {
-        Circle circle;//�l�b�g���[�N�̃f�[�^�����鉼�̍\����
+        Circle circle;//ネットワークのデータを入れる仮の構造体
+
+        p++; // 受信データの先頭部分を無視する
+
         memcpy(&circle.color,p,sizeof(circle.color));
         for (int i = 0; i < sizeof(int);i++)
         {
@@ -25,15 +28,16 @@ struct Circle
         }
         memcpy(&circle.r, p, sizeof(circle.r));
 
-        //�R�s�[�����f�[�^���z�X�g�ɕϊ����Ď��g�ɑ��
+        //コピーしたデータをホストに変換して自身に代入
         color = ntohl(circle.color);
         x = ntohl(circle.x);
         y = ntohl(circle.y);
         r = ntohl(circle.r);
     }
-    void Store(char* p)//�l�b�g���[�N�ɑ��M����f�[�^��ϊ����đ���
+
+    void Store(char* p)//ネットワークに送信するデータを変換して送る
     {
-        Circle circle;//�l�b�g���[�N�̃f�[�^�����鉼�̍\����
+        Circle circle;//ネットワークのデータを入れる仮の構造体
         memcpy(p,&circle.color, sizeof(circle.color));
         for (int i = 0; i < sizeof(int);i++)
         {
@@ -51,12 +55,13 @@ struct Circle
         }
         memcpy(p, &circle.r, sizeof(circle.r));
 
-        //�R�s�[�����f�[�^���z�X�g�ɕϊ����Ď��g�ɑ��
+        //コピーしたデータをホストに変換して自身に代入
         color = htonl(circle.color);
         x = htonl(circle.x);
         y = htonl(circle.y);
         r = htonl(circle.r);
     }
+
     int color;
     int x;
     int y;
