@@ -1,4 +1,5 @@
 #include "Server.h"
+#include <format>
 #include <cassert>
 #include "BufferSize.h"
 
@@ -38,6 +39,7 @@ void Server::JoinClient(const SOCKET _sock, const SOCKADDR_IN& _sockAddrIn)
         }
 
         // 空いているデータ使用する
+        clientData.needSend_ = true;
         clientData.useFlag_ = true;
         clientData.sock_ = _sock;
         clientData.circle_ = Circle{};
@@ -93,7 +95,7 @@ void Server::ReceiveAll()
         itr != clientsData_.end();
         itr++)
     {
-        if (itr->useFlag_ == false)
+        if (itr->useFlag_ == false || itr->sock_ == INVALID_SOCKET)
         {
             continue;  // 使われていないなら無視
         }
@@ -106,6 +108,7 @@ void Server::ReceiveAll()
 
         if (ret > 0)
         {  // 受け取ったサイズが1以上なら
+            log_.WriteLine(std::format("RECV:{}", CLIENT_INDEX));
             Receive(buff, ret, CLIENT_INDEX);
         }
         else
