@@ -57,6 +57,26 @@ void Server::LeaveClient(const SOCKET _sock, const SOCKADDR_IN& _sockAddrIn)
     }
 }
 
+void Server::CheckJoinAll()
+{
+    while (true)
+    {
+        SOCKADDR_IN remoteSockAddrIn = {};
+        int length = sizeof(remoteSockAddrIn);
+        SOCKET sock{ accept(listenerSock_, reinterpret_cast<SOCKADDR*>(&remoteSockAddrIn), &length) };
+
+        if (sock == INVALID_SOCKET)
+        {  // 了承したソケットが無効なら接続者なし
+            break;
+        }
+
+        // 参加処理する
+        JoinClient(sock, remoteSockAddrIn);
+
+        // まだいるかもしれないからループループする
+    }
+}
+
 void Server::ReceiveAll()
 {
     for (auto itr = clientsData_.begin();
@@ -116,24 +136,7 @@ void Server::Initialize()
 
 void Server::Update()
 {
-    int ret = 0;
-
-    while (true)
-    {
-        SOCKADDR_IN remoteSockAddrIn = {};
-        int length = sizeof(remoteSockAddrIn);
-        SOCKET sock{ accept(listenerSock_, reinterpret_cast<SOCKADDR*>(&remoteSockAddrIn), &length) };
-
-        if (sock == INVALID_SOCKET)
-        {  // 了承したソケットが無効なら接続者なし
-            break;
-        }
-
-        // 参加処理する
-        JoinClient(sock, remoteSockAddrIn);
-
-        // まだいるかもしれないからループループする
-    }
+    CheckJoinAll();
 
     ReceiveAll();
 

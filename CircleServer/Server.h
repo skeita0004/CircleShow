@@ -23,6 +23,11 @@ public:
     void LeaveClient(const SOCKET _sock, const SOCKADDR_IN& _sockAddrIn);
 
     /// <summary>
+    /// クライアント参加を確認する
+    /// </summary>
+    void CheckJoinAll();
+
+    /// <summary>
     /// 全クライアントからの受信処理をする
     /// </summary>
     void ReceiveAll();
