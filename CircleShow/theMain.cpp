@@ -18,7 +18,7 @@ namespace
 
     const uint16_t SV_PORT{ 8888 };
     //const char*    SERVER_IPADDRESS{"192.168.42.144"};
-    const char*    SERVER_IPADDRESS{ "127.0.0.1" };
+    const char*    SERVER_IPADDRESS{ "192.168.42.55" };
 }
 
 int APIENTRY WinMain(_In_     HINSTANCE hInstance,
