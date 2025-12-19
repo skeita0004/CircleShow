@@ -13,7 +13,8 @@ using std::endl;
 namespace
 {
     const uint16_t SERVER_PORT{ 8888 };
-    const char IP_ADDRESS[]{ "127.0.0.1" };
+    //const char IP_ADDRESS[]{ "127.0.0.1" };
+    const char IP_ADDRESS[]{ "192.168.42.55" };
 }
 
 int main()
