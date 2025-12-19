@@ -5,6 +5,7 @@
 #include <vector>
 #include <DxLib.h>
 #include "Circle.h"
+#include <cstdlib>
 
 #pragma comment(lib, "ws2_32.lib")
 
@@ -52,7 +53,15 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
         MessageBox(nullptr, errorMsg.c_str(), "ERROR!", MB_OK bitor MB_ICONERROR);
         return -1;
     }
-  
+
+    unsigned long args{0x01};
+    if (ioctlsocket(sock, FIONBIO, &args) == SOCKET_ERROR)
+    {
+        std::string errorMsg{ std::format("Error ioctlsocket. Error Code : {}", WSAGetLastError()) };
+        MessageBox(nullptr, errorMsg.c_str(), "ERROR!", MB_OK bitor MB_ICONERROR);
+        return -1;
+    }
+
     //DxLibの初期化・ウィンドウ処理
     ChangeWindowMode(true);
     SetWindowSizeChangeEnableFlag(false, false);
@@ -70,7 +79,7 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
 
     // 円をつくる
     Circle myCircle{
-        .color{GetColor(255, 0, 255)},
+        .color{GetColor(GetRand(256), GetRand(256), GetRand(256))},
         .r{10}
     };
 
@@ -80,8 +89,21 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
 
         // マウスの入力取る
 
-        // 構造体を送信する
-        int retVal = send(sock, (char*)&myCircle, sizeof(myCircle), 0);
+
+        // ---------------構造体を送信する----------------
+        // 変換
+        char* sendData{}; 
+        sendData = (char*)malloc(sizeof(myCircle)); // ここでmalloc!
+        if (sendData == NULL) // malloc失敗
+        {
+            std::string errorMsg{ "Error malloc." };
+            MessageBox(nullptr, errorMsg.c_str(), "ERROR!", MB_OK bitor MB_ICONERROR);
+            return -1;
+        }
+        myCircle.Store(sendData);
+
+        // 送信
+        int retVal = send(sock, sendData, sizeof(myCircle), 0);
         if (retVal == SOCKET_ERROR and WSAGetLastError() != WSAEWOULDBLOCK)
         {
             std::string errorMsg{ std::format("Error send (Sending my circle data). Error Code : {}", WSAGetLastError()) };
@@ -89,19 +111,32 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
             return -1;
         }
 
-        // 受信用配列
+        // -------------受信を行う-------------------
         std::vector<Circle> circles{};
 
-        void* recvRawData{};
+        // 受信用ポインタ変数
+        char* recvRawData{};
 
-        // 人数を取得
-        //recv(sock, (char*)recvRawData, , 0)
-        //size_t userNum = 
+        // まず人数を取得
+        recv(sock, recvRawData, sizeof(char), 0);
+
+        size_t userNum{0};
+        memcpy_s(&userNum, sizeof(userNum), recvRawData, sizeof(char));
+        const size_t recvDataSize{sizeof(Circle) * userNum};
+
+        // 本命のデータをユーザ分取得
+        recv(sock, recvRawData, recvDataSize, 0);
 
         // 人数分のfor
+        for (int i = 0; i < userNum; i++)
+        {
+            // ここの処理すごく二度手間感ある…
+            circles.push_back(Circle{});
 
-        // 変換して変数たちに代入
-        // (Circleの方で実装)
+            // 変換してメンバたちに代入
+            // (Circleの方で実装)
+            circles[i].Load(recvRawData);
+        }
 
         // 表示
         for (auto& circle : circles)
