@@ -24,6 +24,8 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
 					 _In_     LPSTR     lpCmdLine,
 					 _In_     INT       nCmdShow)
 {
+    
+
     WSADATA wsaData{};
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) not_eq 0)
     {
@@ -62,12 +64,12 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
         return -1;
     }
 
+
     //DxLibの初期化・ウィンドウ処理
     ChangeWindowMode(true);
     SetWindowSizeChangeEnableFlag(false, false);
     SetMainWindowText("Client");
     SetGraphMode(WIN_WIDTH, WIN_HEIGHT, 32);
-    
     if (DxLib_Init() == -1)
     {
         return -1;
