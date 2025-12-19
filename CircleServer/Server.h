@@ -30,9 +30,8 @@ private:
     /// <summary>
     /// クライアントが切断時の処理
     /// </summary>
-    /// <param name="_sock">クライアントとのソケット</param>
-    /// <param name="_sockAddrIn">クライアントの接続情報</param>
-    void LeaveClient(const SOCKET _sock, const SOCKADDR_IN& _sockAddrIn);
+    /// <param name="_clientIndex">クライアントの番号</param>
+    void LeaveClient(const size_t _clientIndex);
 
     /// <summary>
     /// クライアント参加を確認する

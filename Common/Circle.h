@@ -9,7 +9,7 @@ struct Circle
     {
         Circle circle;//ネットワークのデータを入れる仮の構造体
 
-        p++; // 受信データの先頭部分を無視する
+        //p++; // 受信データの先頭部分を無視する
 
         memcpy(&circle.color,p,sizeof(circle.color));
         for (int i = 0; i < sizeof(int);i++)
@@ -35,13 +35,13 @@ struct Circle
         r = ntohl(circle.r);
     }
 
-    void Store(char* p)//ネットワークに送信するデータを変換して送る
+    void Store(char* p) const//ネットワークに送信するデータを変換して送る
     {
-        //コピーしたデータをホストに変換して自身に代入
-        color = htonl(color);
-        x = htonl(x);
-        y = htonl(y);
-        r = htonl(r);
+        //コピーしたデータをホストに変換して 自身に代入しないでください
+        int color = htonl(this->color);
+        int x = htonl(this->x);
+        int y = htonl(this->y);
+        int r = htonl(this->r);
 
         memcpy(p,&color, sizeof(color));
         for (int i = 0; i < sizeof(int);i++)

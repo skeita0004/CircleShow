@@ -5,10 +5,17 @@
 #include "Server.h"
 #include "BufferSize.h"
 #include <format>
+#include <cstdint>
+
 using std::cout;
 using std::endl;
 
-unsigned short SERVER_PORT = 8888;
+namespace
+{
+    const uint16_t SERVER_PORT{ 8888 };
+    const char IP_ADDRESS[]{ "127.0.0.1" };
+}
+
 int main()
 {
     std::cout << SEND_BUFFER_SIZE << std::endl;
@@ -40,15 +47,14 @@ int main()
     sockAddr.sin_addr.s_addr = htonl(INADDR_ANY);
 
     int result{};
-    result = inet_pton(AF_INET, "192.168.42.144", &sockAddr.sin_addr.s_addr);
+    result = inet_pton(AF_INET, IP_ADDRESS, &sockAddr.sin_addr.s_addr);
   
     Server server = { sockAddr };
     server.Initialize();
     while (true)
     {
         server.Update();
-        //std::chrono::
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 60));
+        //std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 60));
     }
 
     return 0;

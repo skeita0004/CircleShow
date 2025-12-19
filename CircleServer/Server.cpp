@@ -24,43 +24,47 @@ void Server::JoinClient(const SOCKET _sock, const SOCKADDR_IN& _sockAddrIn)
     for (ClientData& clientData : clientsData_)
     {
         if (clientData.useFlag_ && clientData.sock_ == _sock)
+        {
             return;
+        }
     }
 
     for (ClientData& clientData : clientsData_)
     {
         // 使用中のデータはスキップ
         if (clientData.useFlag_)
+        {
             continue;
+        }
 
         // 空いているデータ使用する
         clientData.useFlag_ = true;
         clientData.sock_ = _sock;
-        clientData.circle_ = Circle();
+        clientData.circle_ = Circle{};
         
         return;
     }
 
     // 全て使用中だったから新たに追加
-    clientsData_.push_back(ClientData{ true,Circle(),_sock });
+    clientsData_.push_back(ClientData{ true, Circle{}, _sock });
 
     log_.WriteLine("新規参入");
 }
 
-void Server::LeaveClient(const SOCKET _sock, const SOCKADDR_IN& _sockAddrIn)
+void Server::LeaveClient(const size_t _clientIndex)
 {
-    for (ClientData& clientData : clientsData_)
-    {
-        // ソケットが一致するクライアントのデータを探す
-        if (clientData.sock_ == _sock)
-        {
-            // 未使用状態にする
-            clientData.useFlag_ = false;
-            // ソケット、サークルのデータをリセット
-            clientData.sock_ = INVALID_SOCKET;
-            clientData.circle_ = Circle();
-        }
-    }
+    assert(0 <= _clientIndex && _clientIndex < clientsData_.size()
+        && "インデックスが範囲外");
+
+    ClientData& clientData{ clientsData_.at(_clientIndex) };
+    
+    // 未使用状態にする
+    clientData.useFlag_ = false;
+    // ソケット、サークルのデータをリセット
+    clientData.sock_ = INVALID_SOCKET;
+    clientData.circle_ = Circle();
+
+    log_.WriteLine("退出");
 }
 
 void Server::CheckJoinAll()
@@ -89,6 +93,10 @@ void Server::ReceiveAll()
         itr != clientsData_.end();
         itr++)
     {
+        if (itr->useFlag_ == false)
+        {
+            continue;  // 使われていないなら無視
+        }
         const size_t CLIENT_INDEX{ static_cast<size_t>(itr - clientsData_.begin()) };
 
         int ret{};
@@ -96,7 +104,22 @@ void Server::ReceiveAll()
         char buff[RECEIVE_BUFFER_SIZE]{};
         ret = recv(itr->sock_, buff, RECEIVE_BUFFER_SIZE, 0);
 
-        Receive(buff, RECEIVE_BUFFER_SIZE, CLIENT_INDEX);
+        if (ret > 0)
+        {  // 受け取ったサイズが1以上なら
+            Receive(buff, ret, CLIENT_INDEX);
+        }
+        else
+        {
+            int errorCode{ WSAGetLastError() };
+            switch (errorCode)
+            {
+            case WSAECONNRESET:
+                LeaveClient(CLIENT_INDEX);
+                break;
+            default:
+                break;
+            }
+        }
     }
 }
 
@@ -113,8 +136,6 @@ void Server::Receive(const char* _pBuffer, const int _bufferSize, const size_t _
     clientData.circle_.Load(_pBuffer);
     // MEMO: 安全性向上のためにサイズも送るようにしたい
     // clientData.circle_.Load(_pBuffer, _bufferSize);
-
-    log_.WriteLine("受信したよ");
 }
 
 void Server::Initialize()
@@ -128,6 +149,10 @@ void Server::Initialize()
     {
         throw std::exception{ "無効なソケット" };
     }
+
+    // ノンブロッキング設定
+    unsigned long cmdarg = 0x01;
+    ioctlsocket(listenerSock_, FIONBIO, &cmdarg);
 
     ret = bind(listenerSock_, reinterpret_cast<SOCKADDR*>(&localSockAddrIn_), sizeof(localSockAddrIn_));
     if (ret == SOCKET_ERROR)

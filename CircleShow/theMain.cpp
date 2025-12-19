@@ -9,14 +9,16 @@
 
 #pragma comment(lib, "ws2_32.lib")
 
-//ウィンドウサイズ
-const int WIN_WIDTH = 800;
-const int WIN_HEIGHT = 600;
 
 namespace
 {
-    const uint16_t SV_PORT{8888};
-    const char*    SERVER_IPADDRESS{"192.168.42.144"};
+    //ウィンドウサイズ
+    const int WIN_WIDTH{ 800 };
+    const int WIN_HEIGHT{ 600 };
+
+    const uint16_t SV_PORT{ 8888 };
+    //const char*    SERVER_IPADDRESS{"192.168.42.144"};
+    const char*    SERVER_IPADDRESS{ "127.0.0.1" };
 }
 
 int APIENTRY WinMain(_In_     HINSTANCE hInstance,
@@ -86,6 +88,8 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
         .r{10}
     };
 
+    std::vector<Circle> circles{};
+
     while (true)
     {
         ClearDrawScreen();
@@ -95,15 +99,21 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
 
         // ---------------構造体を送信する----------------
         // 変換
-        char* sendData{}; 
-        sendData = (char*)malloc(sizeof(myCircle)); // ここでmalloc!
-        if (sendData == NULL) // malloc失敗
-        {
-            std::string errorMsg{ "Error malloc." };
-            MessageBox(nullptr, errorMsg.c_str(), "ERROR!", MB_OK bitor MB_ICONERROR);
-            return -1;
-        }
+        //char* sendData{}; 
+        //sendData = (char*)malloc(sizeof(myCircle)); // ここでmalloc!
+        // malloc しないでください そもそもヒープ領域を使わないでください せめて動的確保したヒープ領域を free し忘れないでください 本当に
+        //if (sendData == NULL) // malloc失敗
+        //{
+        //    std::string errorMsg{ "Error malloc." };
+        //    MessageBox(nullptr, errorMsg.c_str(), "ERROR!", MB_OK bitor MB_ICONERROR);
+        //    return -1;
+        //}
+
+        char sendData[sizeof(myCircle)]{};
+
         myCircle.Store(sendData);
+
+        printfDx("x: %d, y: %d, r: %d, color: %06x\n", myCircle.x, myCircle.y, myCircle.r, myCircle.color);
 
         // 送信
         int retVal = send(sock, sendData, sizeof(myCircle), 0);
@@ -115,7 +125,6 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
         }
 
         // -------------受信を行う-------------------
-        std::vector<Circle> circles{};
 
         // 受信用ポインタ変数
         char recvRawData[sizeof(Circle)]{};
@@ -142,6 +151,10 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
             return -1;
         }
 
+        if (userNum > 0)  // 受信して人数がいるなら更新
+        {
+            circles.clear();
+        }
         // 人数分のfor
         for (int i = 0; i < userNum; i++)
         {
