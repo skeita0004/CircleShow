@@ -3,7 +3,7 @@
 #include <format>
 #include <string>
 #include <DxLib.h>
-
+#include "Circle.h"
 
 #pragma comment(lib, "ws2_32.lib")
 
@@ -71,8 +71,15 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
     {
         ClearDrawScreen();
 
-        //動作確認用の円
-        DrawCircle(WIN_WIDTH / 2, WIN_HEIGHT / 2, 10, GetColor(255, 0, 0));
+        Circle circle;
+        circle.x = 0;
+        circle.y = 0;
+        circle.r = 30;
+        circle.color = GetColor(255, 0, 0);
+        GetMousePoint(&circle.x, &circle.y);
+        
+        //円表示
+        DrawCircle(circle.x, circle.y, circle.r, circle.color);
         
         ScreenFlip();
         WaitTimer(16);
