@@ -107,10 +107,8 @@ void Server::Update()
 
 }
 
-void Server::Send(char* _pBuffer, const int _bufferSize)
+void Server::SendAll()
 {
-    assert(_bufferSize <= SERVER_SEND_BUFFER_SIZE && "バッファのサイズが足りない");
-
 	size_t CLIENT_COUNT = clientsData_.size();
 	char buff[SERVER_SEND_BUFFER_SIZE]{};
 
@@ -121,6 +119,21 @@ void Server::Send(char* _pBuffer, const int _bufferSize)
         clientsData_[i].circle_.Store(p);
 		//memcpy(p, &clientsData_[i].circle_, sizeof(Circle));
 	}
+    int writeLength{ sizeof(Circle) * CLIENT_COUNT + sizeof(UINT8) };
     
-	memcpy(_pBuffer, &buff, _bufferSize);
+    // 全クライアントに送信する
+    for (auto& client : clientsData_)
+    {
+        if (client.sock_ == INVALID_SOCKET)
+        {  // 無効ソケットなら使ってない判定
+            client.useFlag_ = false;
+        }
+        if (client.useFlag_ == false)
+        {  // 使っていないなら早期回帰
+            continue;
+        }
+
+        // 送信！
+        send(client.sock_, buff, writeLength, 0);
+    }
 }
