@@ -14,6 +14,7 @@ struct ClientData
         const Circle& _circle,
         const SOCKET _sock);
 
+    bool needSend_;  // サーバからデータを送信する必要があるか
     bool useFlag_;   // 使われているか
     Circle circle_;  // 円のデータ
     SOCKET sock_;    // ソケット

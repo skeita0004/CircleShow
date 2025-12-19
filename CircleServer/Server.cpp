@@ -134,6 +134,7 @@ void Server::Receive(const char* _pBuffer, const int _bufferSize, const size_t _
     assert(sizeof(Circle) <= _bufferSize && "書き込むバッファのサイズが足りないよ！");
 
     clientData.circle_.Load(_pBuffer);
+    clientData.needSend_ = true;
     // MEMO: 安全性向上のためにサイズも送るようにしたい
     // clientData.circle_.Load(_pBuffer, _bufferSize);
 }
@@ -204,7 +205,13 @@ void Server::SendAll()
             continue;
         }
 
+        if (client.needSend_ == false)
+        {
+            continue;  // 送信する必要がないなら回帰
+        }
+
         // 送信！
         send(client.sock_, buff, writeLength, 0);
+        client.needSend_ = false;
     }
 }
