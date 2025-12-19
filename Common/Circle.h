@@ -37,29 +37,28 @@ struct Circle
 
     void Store(char* p)//ネットワークに送信するデータを変換して送る
     {
-        Circle circle;//ネットワークのデータを入れる仮の構造体
-        memcpy(p,&circle.color, sizeof(circle.color));
-        for (int i = 0; i < sizeof(int);i++)
-        {
-            p++;
-        }
-        memcpy(p, &circle.x, sizeof(circle.x));
-        for (int i = 0; i < sizeof(int);i++)
-        {
-            p++;
-        }
-        memcpy(p, &circle.y, sizeof(circle.y));
-        for (int i = 0; i < sizeof(int);i++)
-        {
-            p++;
-        }
-        memcpy(p, &circle.r, sizeof(circle.r));
-
         //コピーしたデータをホストに変換して自身に代入
-        color = htonl(circle.color);
-        x = htonl(circle.x);
-        y = htonl(circle.y);
-        r = htonl(circle.r);
+        color = htonl(color);
+        x = htonl(x);
+        y = htonl(y);
+        r = htonl(r);
+
+        memcpy(p,&color, sizeof(color));
+        for (int i = 0; i < sizeof(int);i++)
+        {
+            p++;
+        }
+        memcpy(p, &x, sizeof(x));
+        for (int i = 0; i < sizeof(int);i++)
+        {
+            p++;
+        }
+        memcpy(p, &y, sizeof(y));
+        for (int i = 0; i < sizeof(int);i++)
+        {
+            p++;
+        }
+        memcpy(p, &r, sizeof(r));
     }
 
     int color;
