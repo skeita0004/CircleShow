@@ -113,7 +113,7 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
 
         myCircle.Store(sendData);
 
-        printfDx("x: %d, y: %d, r: %d, color: %06x\n", myCircle.x, myCircle.y, myCircle.r, myCircle.color);
+        //printfDx("x: %d, y: %d, r: %d, color: %06x\n", myCircle.x, myCircle.y, myCircle.r, myCircle.color);
 
         // 送信
         int retVal = send(sock, sendData, sizeof(myCircle), 0);
