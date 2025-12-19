@@ -43,6 +43,8 @@ void Server::JoinClient(const SOCKET _sock, const SOCKADDR_IN& _sockAddrIn)
 
     // 全て使用中だったから新たに追加
     clientsData_.push_back(ClientData{ true,Circle(),_sock });
+
+    log_.WriteLine("新規参入");
 }
 
 void Server::LeaveClient(const SOCKET _sock, const SOCKADDR_IN& _sockAddrIn)
@@ -111,6 +113,8 @@ void Server::Receive(const char* _pBuffer, const int _bufferSize, const size_t _
     clientData.circle_.Load(_pBuffer);
     // MEMO: 安全性向上のためにサイズも送るようにしたい
     // clientData.circle_.Load(_pBuffer, _bufferSize);
+
+    log_.WriteLine("受信したよ");
 }
 
 void Server::Initialize()
@@ -136,6 +140,8 @@ void Server::Initialize()
     {
         throw std::exception{ "リスンソケットの受付開始に失敗" };
     }
+
+    log_.WriteLine("初期化上手くいったよ");
 }
 
 void Server::Update()

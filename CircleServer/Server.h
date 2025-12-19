@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "ClientData.h"
+#include "Logger.h"
 
 class Server
 {
@@ -63,6 +64,8 @@ private:
     void Receive(const char* _pBuffer, const int _bufferSize, const size_t _clientIndex);
 
 private:
+    Logger log_;
+
     SOCKADDR_IN localSockAddrIn_;  // サーバ自身のインターネットのソケットアドレス
     SOCKET listenerSock_;  // 受付用ソケット
     std::vector<ClientData> clientsData_;  // クライアントのデータ
