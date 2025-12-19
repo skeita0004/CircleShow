@@ -4,9 +4,11 @@
 #include "WSAIncluding.h"
 #include "Server.h"
 #include "BufferSize.h"
+#include <format>
 using std::cout;
 using std::endl;
 
+unsigned short SERVER_PORT = 8888;
 int main()
 {
     std::cout << SEND_BUFFER_SIZE << std::endl;
@@ -32,11 +34,16 @@ int main()
     cout << "Success :socket" << endl;
 
     SOCKADDR_IN sockAddr{};
+    memset(&sockAddr, 0, sizeof(sockAddr));
+    sockAddr.sin_family = AF_INET;
+    sockAddr.sin_port = htons(SERVER_PORT);
+    sockAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+
     int result{};
-    result = inet_pton(AF_INET, "127.0.0.1", &sockAddr.sin_addr.s_addr);
-
+    result = inet_pton(AF_INET, "192.168.42.144", &sockAddr.sin_addr.s_addr);
+  
     Server server = { sockAddr };
-
+    server.Initialize();
     while (true)
     {
         server.Update();

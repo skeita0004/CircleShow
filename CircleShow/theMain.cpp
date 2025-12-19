@@ -16,7 +16,7 @@ const int WIN_HEIGHT = 600;
 namespace
 {
     const uint16_t SV_PORT{8888};
-    const char*    SERVER_IPADDRESS{"192.168.42.3"};
+    const char*    SERVER_IPADDRESS{"192.168.42.144"};
 }
 
 int APIENTRY WinMain(_In_     HINSTANCE hInstance,
