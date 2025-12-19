@@ -6,12 +6,16 @@ Server::Server(const SOCKADDR_IN& _localSockAddr) :
     localSockAddrIn_{ _localSockAddr },
     listenerSock_{ INVALID_SOCKET }
 {
-	
+    
 }
 
 Server::~Server()
 {
     closesocket(listenerSock_);
+    for (ClientData& clientData : clientsData_)
+    {
+        closesocket(clientData.sock_);
+    }
 }
 
 void Server::JoinClient(const SOCKET _sock, const SOCKADDR_IN& _sockAddrIn)
@@ -96,17 +100,17 @@ void Server::ReceiveAll()
 
 void Server::Receive(const char* _pBuffer, const int _bufferSize, const size_t _clientIndex)
 {
-	assert(0 <= _clientIndex && _clientIndex <= clientsData_.size()
-		&& "範囲外アクセスが発生するよ！");
+    assert(0 <= _clientIndex && _clientIndex <= clientsData_.size()
+        && "範囲外アクセスが発生するよ！");
 
-	ClientData& clientData{ clientsData_.at(_clientIndex) };
+    ClientData& clientData{ clientsData_.at(_clientIndex) };
 
-	assert(clientData.useFlag_ && "使われていないクライアントからデータを受け取った");
-	assert(sizeof(Circle) <= _bufferSize && "書き込むバッファのサイズが足りないよ！");
+    assert(clientData.useFlag_ && "使われていないクライアントからデータを受け取った");
+    assert(sizeof(Circle) <= _bufferSize && "書き込むバッファのサイズが足りないよ！");
 
-	clientData.circle_.Load(_pBuffer);
-	// MEMO: 安全性向上のためにサイズも送るようにしたい
-	// clientData.circle_.Load(_pBuffer, _bufferSize);
+    clientData.circle_.Load(_pBuffer);
+    // MEMO: 安全性向上のためにサイズも送るようにしたい
+    // clientData.circle_.Load(_pBuffer, _bufferSize);
 }
 
 void Server::Initialize()
@@ -145,16 +149,16 @@ void Server::Update()
 
 void Server::SendAll()
 {
-	size_t CLIENT_COUNT = clientsData_.size();
-	char buff[SEND_BUFFER_SIZE]{};
+    size_t CLIENT_COUNT = clientsData_.size();
+    char buff[SEND_BUFFER_SIZE]{};
 
-	buff[0] = CLIENT_COUNT;
-	for (size_t i = 0; i < CLIENT_COUNT; i++)
-	{
-		char* p = &buff[sizeof(Circle) * i + sizeof(UINT8)];
+    buff[0] = CLIENT_COUNT;
+    for (size_t i = 0; i < CLIENT_COUNT; i++)
+    {
+        char* p = &buff[sizeof(Circle) * i + sizeof(UINT8)];
         clientsData_[i].circle_.Store(p);
-		//memcpy(p, &clientsData_[i].circle_, sizeof(Circle));
-	}
+        //memcpy(p, &clientsData_[i].circle_, sizeof(Circle));
+    }
     int writeLength{ sizeof(Circle) * CLIENT_COUNT + sizeof(UINT8) };
     
     // 全クライアントに送信する
