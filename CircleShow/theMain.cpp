@@ -2,8 +2,10 @@
 #include <WS2tcpip.h>
 #include <format>
 #include <string>
+#include <vector>
 #include <DxLib.h>
 #include "Circle.h"
+#include <cstdlib>
 
 #pragma comment(lib, "ws2_32.lib")
 
@@ -22,6 +24,8 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
 					 _In_     LPSTR     lpCmdLine,
 					 _In_     INT       nCmdShow)
 {
+    
+
     WSADATA wsaData{};
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) not_eq 0)
     {
@@ -51,13 +55,21 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
         MessageBox(nullptr, errorMsg.c_str(), "ERROR!", MB_OK bitor MB_ICONERROR);
         return -1;
     }
-  
+
+    unsigned long args{0x01};
+    if (ioctlsocket(sock, FIONBIO, &args) == SOCKET_ERROR)
+    {
+        std::string errorMsg{ std::format("Error ioctlsocket. Error Code : {}", WSAGetLastError()) };
+        MessageBox(nullptr, errorMsg.c_str(), "ERROR!", MB_OK bitor MB_ICONERROR);
+        return -1;
+    }
+
+
     //DxLibの初期化・ウィンドウ処理
     ChangeWindowMode(true);
     SetWindowSizeChangeEnableFlag(false, false);
     SetMainWindowText("Client");
     SetGraphMode(WIN_WIDTH, WIN_HEIGHT, 32);
-    
     if (DxLib_Init() == -1)
     {
         return -1;
@@ -67,13 +79,84 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
     SetDrawScreen(DX_SCREEN_BACK);
     SetAlwaysRunFlag(1);
 
+    // 円をつくる
+    Circle myCircle{
+        .color{GetColor(GetRand(256), GetRand(256), GetRand(256))},
+        .x{0},
+        .y{0},
+        .r{10}
+    };
+
     while (true)
     {
         ClearDrawScreen();
 
-        //動作確認用の円
-        DrawCircle(WIN_WIDTH / 2, WIN_HEIGHT / 2, 10, GetColor(255, 0, 0));
+        // マウスの入力取る
+        GetMousePoint(&myCircle.x, &myCircle.y);
 
+        // ---------------構造体を送信する----------------
+        // 変換
+        char* sendData{}; 
+        sendData = (char*)malloc(sizeof(myCircle)); // ここでmalloc!
+        if (sendData == NULL) // malloc失敗
+        {
+            std::string errorMsg{ "Error malloc." };
+            MessageBox(nullptr, errorMsg.c_str(), "ERROR!", MB_OK bitor MB_ICONERROR);
+            return -1;
+        }
+        myCircle.Store(sendData);
+
+        // 送信
+        int retVal = send(sock, sendData, sizeof(myCircle), 0);
+        if (retVal == SOCKET_ERROR and WSAGetLastError() != WSAEWOULDBLOCK)
+        {
+            std::string errorMsg{ std::format("Error send (Sending my circle data). Error Code : {}", WSAGetLastError()) };
+            MessageBox(nullptr, errorMsg.c_str(), "ERROR!", MB_OK bitor MB_ICONERROR);
+            return -1;
+        }
+
+        // -------------受信を行う-------------------
+        std::vector<Circle> circles{};
+
+        // 受信用ポインタ変数
+        char* recvRawData{};
+
+        // まず人数を取得
+        recv(sock, recvRawData, sizeof(char), 0);
+
+        size_t userNum{0};
+        memcpy_s(&userNum, sizeof(userNum), recvRawData, sizeof(char));
+        const size_t recvDataSize{sizeof(Circle) * userNum};
+
+        // 本命のデータをユーザ分取得
+        recv(sock, recvRawData, recvDataSize, 0);
+
+        // 人数分のfor
+        for (int i = 0; i < userNum; i++)
+        {
+            // ここの処理すごく二度手間感ある…
+            circles.push_back(Circle{});
+
+            // 変換してメンバたちに代入
+            // (Circleの方で実装)
+            circles[i].Load(recvRawData);
+        }
+
+        // 表示
+        for (auto& circle : circles)
+        {
+            DrawCircle(circle.x, circle.y, circle.r, circle.color);
+        }
+
+        //Circle circle;
+        //circle.x = 0;
+        //circle.y = 0;
+        //circle.r = 30;
+        //circle.color = GetColor(255, 0, 0);
+        //
+        ////円表示
+        //DrawCircle(circle.x, circle.y, circle.r, circle.color);
+        //
         ScreenFlip();
         WaitTimer(16);
         if (ProcessMessage() == -1)
