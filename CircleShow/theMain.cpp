@@ -163,7 +163,7 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
 
             // 変換してメンバたちに代入
             // (Circleの方で実装)
-            circles[i].Load(recvRawData);
+            circles[i].Load(recvRawData + sizeof(Circle) * i);
         }
 
         // 表示
