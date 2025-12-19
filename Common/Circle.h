@@ -61,7 +61,7 @@ struct Circle
         memcpy(p, &r, sizeof(r));
     }
 
-    int color;
+    unsigned int color;
     int x;
     int y;
     int r;
