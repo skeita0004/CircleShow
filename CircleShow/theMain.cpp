@@ -17,8 +17,8 @@ namespace
     const int WIN_HEIGHT{ 600 };
 
     const uint16_t SV_PORT{ 8888 };
-    //const char*    SERVER_IPADDRESS{"192.168.42.144"};
-    const char*    SERVER_IPADDRESS{ "192.168.42.55" };
+    const char*    SERVER_IPADDRESS{"192.168.42.55"};
+    //const char*    SERVER_IPADDRESS{ "127.0.0.1" };
 }
 
 int APIENTRY WinMain(_In_     HINSTANCE hInstance,
@@ -113,7 +113,7 @@ int APIENTRY WinMain(_In_     HINSTANCE hInstance,
 
         myCircle.Store(sendData);
 
-        printfDx("x: %d, y: %d, r: %d, color: %06x\n", myCircle.x, myCircle.y, myCircle.r, myCircle.color);
+        //printfDx("x: %d, y: %d, r: %d, color: %06x\n", myCircle.x, myCircle.y, myCircle.r, myCircle.color);
 
         // 送信
         int retVal = send(sock, sendData, sizeof(myCircle), 0);
