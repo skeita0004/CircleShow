@@ -14,7 +14,7 @@ namespace
 {
     const uint16_t SERVER_PORT{ 8888 };
     //const char IP_ADDRESS[]{ "127.0.0.1" };
-    const char IP_ADDRESS[]{ "192.168.42.55" };
+    //const char IP_ADDRESS[]{ "192.168.42.55" };
 }
 
 int main()
@@ -47,9 +47,6 @@ int main()
     sockAddr.sin_port = htons(SERVER_PORT);
     sockAddr.sin_addr.s_addr = htonl(INADDR_ANY);
 
-    int result{};
-    result = inet_pton(AF_INET, IP_ADDRESS, &sockAddr.sin_addr.s_addr);
-  
     Server server = { sockAddr };
     server.Initialize();
     while (true)
