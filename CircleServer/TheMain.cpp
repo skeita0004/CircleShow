@@ -55,7 +55,6 @@ int main()
     while (true)
     {
         server.Update();
-        //std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 60));
     }
 
     return 0;
